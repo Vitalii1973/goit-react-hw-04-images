@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import Modal from './Modal/Modal';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -24,7 +24,6 @@ const App = () => {
   const [hasMore, setHasMore] = useState(false);
   const [message, setMessage] = useState('');
   const modalRef = useRef(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   useEffect(() => {
     const fetchData = async (query, page) => {
@@ -78,7 +77,7 @@ const App = () => {
     setPage(prevPage => prevPage + 1);
   };
 
-  const handleOpenModal = image => {
+  const handleOpenModal = (image, index) => {
     if (!modalImage) {
       setModalImage(image);
     }
@@ -86,22 +85,6 @@ const App = () => {
 
   const handleCloseModal = () => {
     setModalImage(null);
-  };
-
-  const showNextImage = () => {
-    if (selectedImageIndex < images.length - 1) {
-      setSelectedImageIndex(prevIndex => prevIndex + 1);
-    } else {
-      setSelectedImageIndex(0);
-    }
-  };
-
-  const showPrevImage = () => {
-    if (selectedImageIndex > 0) {
-      setSelectedImageIndex(prevIndex => prevIndex - 1);
-    } else {
-      setSelectedImageIndex(images.length - 1);
-    }
   };
 
   return (
@@ -130,8 +113,6 @@ const App = () => {
           imageUrl={modalImage}
           alt="Large Image"
           onClose={handleCloseModal}
-          showNextImage={showNextImage}
-          showPrevImage={showPrevImage}
           modalRef={modalRef}
         />
       )}

@@ -2,44 +2,20 @@ import React, { useEffect } from 'react';
 import ReactModal from 'react-modal';
 import './Modal.css';
 
-const Modal = ({
-  imageUrl,
-  onClose,
-  showNextImage,
-  showPrevImage,
-  modalRef,
-}) => {
+const Modal = ({ imageUrl, alt, onClose, modalRef }) => {
   useEffect(() => {
-    const handleKeyDown = event => {
-      if (event.key === 'Escape') {
-        onClose();
-      } else if (event.key === 'ArrowRight') {
-        showNextImage();
-      } else if (event.key === 'ArrowLeft') {
-        showPrevImage();
-      }
-    };
-
-    const handleClickOutside = event => {
-      const modalElement = modalRef.current && modalRef.current.portal;
-
-      if (
-        modalElement &&
-        modalElement.contains &&
-        !modalElement.contains(event.target)
-      ) {
+    const handleKeyDown = e => {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose, showNextImage, showPrevImage, modalRef]);
+  }, [onClose]);
 
   return (
     <ReactModal
@@ -50,7 +26,7 @@ const Modal = ({
       className="Modal"
       overlayClassName="Overlay"
     >
-      <img src={imageUrl} alt="" />
+      <img src={imageUrl} alt={alt} />
     </ReactModal>
   );
 };
